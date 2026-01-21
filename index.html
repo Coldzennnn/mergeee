@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Labubu: Evolution</title>
+  <title>Лабубу: Эволюция</title>
 
   <script src="https://yandex.ru/games/sdk/v2"></script>
 
@@ -68,96 +68,90 @@
 
     #loadingOverlay { z-index: 9999; background: #000; display: flex; }
 
-    /* --- АДАПТИВНЫЕ ПОПАПЫ (Ваши правила 1) --- */
+    /* --- АДАПТИВНЫЕ ПОПАПЫ --- */
     .popup-box {
+        position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
-        
+        width: clamp(320px, 92vw, 600px);
+        min-height: 220px;
+        max-height: 94vh;
         background: #101426;
         border: 3px solid #8BFFB0;
         border-radius: 16px;
+        padding: 16px;
         box-shadow: 0 0 25px rgba(139,255,176,0.2);
-        
-        /* Правило 1 */
-        width: clamp(300px, 90vw, 600px);
-        max-height: 92vh;
-        padding: clamp(12px, 3vw, 20px);
-        
-        /* Важно: если контент не влезает по высоте, появляется скролл внутри попапа, кнопки не исчезают */
         overflow-y: auto; 
     }
     
-    /* --- ТЕКСТ И ЗАГОЛОВКИ (Ваши правила 3) --- */
-    .title, .battle-header {
-        /* Правило 3: Заголовки */
-        font-size: clamp(18px, 4.5vw, 32px);
-        
+    .title {
+        font-size: clamp(20px, 5vw, 32px);
         color: #8BFFB0;
         text-transform: uppercase;
         letter-spacing: 1px;
-        margin-bottom: 10px;
+        margin: 0 0 10px 0;
         -webkit-text-stroke: 1px #000;
         text-align: center;
-        flex-shrink: 0; /* Заголовок не сплющивается */
+        flex-shrink: 0;
     }
-    
     .sub { 
         color: #cfe2ff; font-weight: 900; text-align: center; 
-        margin-bottom: 12px; font-size: clamp(14px, 4vw, 18px); 
+        margin-bottom: 12px; font-size: clamp(14px, 4vw, 20px); 
         flex-shrink: 0;
     }
 
     .btn-row { 
         display: flex; gap: 10px; width: 100%; 
         margin-top: 10px; 
-        flex-shrink: 0; /* Кнопки всегда сохраняют свой размер */
+        flex-shrink: 0; 
     }
     
     button { 
         font-family: inherit; font-weight: 900; cursor: pointer; 
-        border-radius: 10px; 
+        border-radius: 10px; padding: 14px; 
         border: 2px solid transparent; text-transform: uppercase; 
         touch-action: manipulation; 
-        flex: 1;
-        
-        /* Правило 3: Кнопки */
-        font-size: clamp(12px, 3.5vw, 16px);
-        padding: clamp(8px, 2vh, 12px);
+        font-size: clamp(14px, 4vw, 18px); 
     }
-    .btn-green { background: #35c56a; border-color: #1b6c38; color: #fff; }
-    .btn-gray { background: #3b4257; border-color: #262b38; color: #e4ecff; }
-    .btn-red { background: #ff5c9a; border-color: #7f2548; color: #fff; }
+    .btn-green { background: #35c56a; border-color: #1b6c38; color: #fff; flex: 1; }
+    .btn-gray { background: #3b4257; border-color: #262b38; color: #e4ecff; flex: 1; }
+    .btn-red { background: #ff5c9a; border-color: #7f2548; color: #fff; flex: 1; }
 
-    /* --- АРЕНА (Ваши правила 2) --- */
+    /* Setup & Battle UI */
+    .battle-header {
+        font-size: clamp(20px, 5vw, 36px);
+        color: #8BFFB0;
+        text-transform: uppercase;
+        text-shadow: 2px 2px 0 #000;
+        margin-bottom: 8px;
+        text-align: center;
+        flex-shrink: 0;
+    }
+    
     .setup-arena {
         display: flex;
         width: 100%;
-        
-        /* Правило 2 */
-        height: 55vh;
-        max-height: 450px;
-        min-height: 200px;
-        
+        flex: 1 1 auto;
+        min-height: 150px; 
         border: 2px solid #2a3142;
         background: #0c1020;
         border-radius: 12px;
-        overflow: hidden; /* Скролл внутри .side, а не арены */
-        margin-bottom: 5px;
-        flex-shrink: 1; /* Арена может сжиматься, если мало места, но не меньше min-height */
+        overflow: hidden;
+        margin: 6px 0 10px;
     }
     
     .side { 
         flex: 1; padding: 8px; 
         display: flex; flex-direction: column; align-items: center; 
-        overflow-y: auto; /* Скроллим только списки карт */
+        overflow-y: auto; 
         overflow-x: hidden;
     }
     .side.enemy { background: linear-gradient(180deg, #2a1120, #140a14); border-left: 2px solid #2a3142; }
     .side.player { background: linear-gradient(180deg, #0a1424, #070b14); }
 
     .side-title { 
-        font-size: clamp(12px, 3.5vw, 14px); 
+        font-size: clamp(12px, 3.5vw, 16px); 
         color: #cfe2ff; margin-bottom: 6px; font-weight: 900; text-align: center; 
         flex-shrink: 0;
     }
@@ -168,10 +162,9 @@
     }
     
     .card {
-        /* Правило 3: Карточки */
-        width: clamp(50px, 12vw, 85px);
+        width: clamp(55px, 13vw, 90px);
         aspect-ratio: 0.77;
-        
+        height: auto;
         background: #111a2f; border: 2px solid rgba(255,255,255,0.12); border-radius: 10px;
         display: flex; flex-direction: column; align-items: center; justify-content: center;
         cursor: pointer; flex-shrink: 0; 
@@ -185,41 +178,24 @@
 
     /* Result */
     .resultTitle { 
-        font-size: clamp(24px, 8vw, 48px); 
-        -webkit-text-stroke: 2px #000; letter-spacing: 1px; margin-bottom: 10px; 
-        text-align: center; flex-shrink: 0;
+        font-size: clamp(28px, 8vw, 52px); 
+        -webkit-text-stroke: 2px #000; letter-spacing: 1px; margin-bottom: 16px; 
+        text-align: center;
     }
     .win { color: #8BFFB0; }
     .lose { color: #ff5c9a; }
-    .reward { font-size: clamp(18px, 6vw, 24px); color: #ffe58a; -webkit-text-stroke: 1px #000; margin-bottom: 15px; text-align: center; flex-shrink: 0; }
+    .reward { font-size: clamp(20px, 6vw, 28px); color: #ffe58a; -webkit-text-stroke: 1px #000; margin-bottom: 20px; text-align: center; }
 
-    /* --- MEDIA QUERIES (Ваши правила 4 и 5) --- */
-    
-    /* Правило 4: Маленькие экраны (горизонтальная ориентация) */
+    /* Media Queries */
     @media (max-height: 500px) {
-        .popup-box {
-            padding: 8px;
-            max-height: 96vh;
-        }
-        .setup-arena {
-            height: 60vh; /* Арена занимает 60% высоты */
-            min-height: 120px;
-            margin-bottom: 4px;
-        }
-        .title, .battle-header { font-size: 18px; margin-bottom: 4px; }
-        .sub { margin-bottom: 4px; font-size: 14px; }
+        .popup-box { padding: 8px; flex-direction: column; width: 85vw; }
+        .setup-arena { min-height: 120px; margin: 4px 0; }
+        .battle-header { font-size: 18px; margin-bottom: 4px; }
         .btn-row { margin-top: 6px; }
-        button { padding: 6px; font-size: 12px; }
-        .card { width: 45px; /* Карточки уменьшаются до 45px */ }
-        
-        .side-title { font-size: 10px; margin-bottom: 2px; }
-        .cards { gap: 4px; }
-    }
-
-    /* Правило 5: Узкие экраны */
-    @media (max-width: 400px) {
-        .popup-box { width: 95vw; }
-        .setup-arena { height: 50vh; }
+        button { padding: 8px; font-size: 12px; }
+        .title { font-size: 20px; margin-bottom: 6px; }
+        .resultTitle { margin-bottom: 8px; font-size: 24px; }
+        .reward { margin-bottom: 8px; font-size: 16px; }
     }
   </style>
 </head>
@@ -364,7 +340,7 @@
         }
         click(){ this._tone(520,'sine',0.12,0.12,260); }
         merge(){ this._tone(260,'sine',0.22,0.18,820); setTimeout(()=>this._tone(680,'sine',0.18,0.12,1200),35); }
-        // ЗВУК ПОКУПКИ ПОЛНОСТЬЮ УБРАН
+        // ЗВУК ПОКУПКИ ОТКЛЮЧЕН
         hit(){ this._tone(120,'triangle',0.10,0.14,55); }
         atk(){ this._tone(220,'triangle',0.18,0.10,70); }
         win(){ [523,659,784,1046].forEach((f,i)=>setTimeout(()=>this._tone(f,'sine',0.35,0.16),i*90)); }
@@ -869,16 +845,21 @@
 
     function physicsStep(dt){
         const w=window.innerWidth, h=window.innerHeight;
-        const uiX = w - 120;
-        const uiY = h * 0.32; 
+        
+        // --- ЗАЩИТНАЯ ЗОНА (СТЕНА СПРАВА) ---
+        // Кнопки занимают примерно 20% ширины справа + отступы
+        const limitX = w - (Math.min(w, h) * 0.22); 
+        // Кнопки начинаются примерно с 25% высоты экрана и идут вниз
+        const limitY = h * 0.25; 
 
         for(const u of gameState.units){
             if(u.anim < 1) u.anim = Math.min(1, u.anim + 0.10);
             if(u.isDragging) continue;
 
-            if(u.x > uiX && u.y > uiY) {
-                 u.vx -= 120 * dt; 
-                 u.vy -= 40 * dt; 
+            // Логика стены: если юнит заплывает в зону кнопок, отталкиваем его влево
+            if(u.x > limitX && u.y > limitY) {
+                 u.x = limitX; // Жестко ставим на границу
+                 u.vx = -Math.abs(u.vx) * 0.6 - 40; // Отталкиваем с силой влево
             }
 
             u.phase += dt * (0.85 + u.level*0.008); u.vx += Math.cos(u.phase) * CONFIG.DRIFT * dt; u.vy += Math.sin(u.phase*0.9) * CONFIG.DRIFT * dt;
@@ -1002,8 +983,6 @@
 
         // ДИНАМИЧЕСКИЙ РАЗМЕР КНОПОК
         // Используем множитель поменьше для мобильных
-        // На 360px высоте -> 360 * 0.12 = ~43px (радиус) -> ~86px диаметр. 
-        // clamp ограничивает максимальный размер до 55px (110px диаметр), чтобы не были гигантами
         let scaleFactor = (h < 500) ? 0.13 : 0.08; 
         
         const rBuy = clamp(minDim * scaleFactor, 35, 55); 
