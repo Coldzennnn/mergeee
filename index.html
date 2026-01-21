@@ -41,7 +41,7 @@
     .overlay {
         display: none;
         position: absolute; inset: 0;
-        background: rgba(0,0,0,0.85);
+        background: rgba(0,0,0,0.88);
         z-index: 100;
         align-items: center;
         justify-content: center;
@@ -51,7 +51,7 @@
         pointer-events: auto;
     }
 
-    /* ROTATE OVERLAY (Only for Mobile Portrait) */
+    /* ROTATE OVERLAY */
     #rotateOverlay { background: #000; z-index: 99999; }
     .phone-icon {
         width: 50px; height: 80px; border: 3px solid #8BFFB0; border-radius: 8px;
@@ -68,112 +68,139 @@
 
     #loadingOverlay { z-index: 9999; background: #000; display: flex; }
 
-    /* --- АДАПТИВНЫЕ ПОПАПЫ --- */
+    /* --- АДАПТИВНЫЕ ПОПАПЫ (ИСПРАВЛЕНО) --- */
     .popup-box {
-        width: clamp(300px, 90vw, 600px);
-        max-height: 95vh;
-        background: #101426;
-        border: 2px solid #8BFFB0;
-        border-radius: 12px;
-        padding: 12px;
-        box-shadow: 0 0 20px rgba(139,255,176,0.15);
+        position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
-        overflow-y: auto;
+        /* Размеры */
+        width: clamp(320px, 92vw, 600px);
+        min-height: 220px; /* Чтобы не сплющивалось */
+        max-height: 94vh;  /* Чтобы не вылезало за экран */
+        
+        background: #101426;
+        border: 3px solid #8BFFB0;
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: 0 0 25px rgba(139,255,176,0.2);
     }
     
     .title {
-        font-size: clamp(16px, 4vh, 28px);
+        font-size: clamp(20px, 5vw, 32px);
         color: #8BFFB0;
         text-transform: uppercase;
         letter-spacing: 1px;
-        margin: 0 0 8px 0;
-        -webkit-text-stroke: 0.8px #000;
+        margin: 0 0 10px 0;
+        -webkit-text-stroke: 1px #000;
         text-align: center;
+        flex-shrink: 0; /* Заголовок не сжимается */
+    }
+    .sub { 
+        color: #cfe2ff; font-weight: 900; text-align: center; 
+        margin-bottom: 12px; font-size: clamp(14px, 4vw, 20px); 
         flex-shrink: 0;
     }
-    .sub { color: #cfe2ff; font-weight: 900; text-align: center; margin-bottom: 8px; font-size: clamp(12px, 3vh, 18px); }
 
-    .btn-row { display: flex; gap: 8px; width: 100%; margin-top: 8px; flex-shrink: 0; }
+    /* Кнопки всегда внизу и не исчезают */
+    .btn-row { 
+        display: flex; gap: 10px; width: 100%; 
+        margin-top: 10px; 
+        flex-shrink: 0; 
+    }
+    
     button { 
         font-family: inherit; font-weight: 900; cursor: pointer; 
-        border-radius: 8px; padding: clamp(8px, 2vh, 12px); 
+        border-radius: 10px; padding: 14px; 
         border: 2px solid transparent; text-transform: uppercase; 
-        touch-action: manipulation; font-size: clamp(12px, 2.5vh, 16px);
+        touch-action: manipulation; 
+        font-size: clamp(14px, 4vw, 18px); /* Текст кнопок */
     }
     .btn-green { background: #35c56a; border-color: #1b6c38; color: #fff; flex: 1; }
     .btn-gray { background: #3b4257; border-color: #262b38; color: #e4ecff; flex: 1; }
     .btn-red { background: #ff5c9a; border-color: #7f2548; color: #fff; flex: 1; }
 
-    /* Setup & Battle UI - Глубокая адаптация */
+    /* Setup & Battle UI - Скролл внутри арены */
     .battle-header {
-        font-size: clamp(16px, 4vh, 32px);
+        font-size: clamp(20px, 5vw, 36px);
         color: #8BFFB0;
         text-transform: uppercase;
         text-shadow: 2px 2px 0 #000;
-        margin-bottom: 6px;
+        margin-bottom: 8px;
         text-align: center;
         flex-shrink: 0;
     }
+    
     .setup-arena {
         display: flex;
         width: 100%;
-        height: clamp(150px, 50vh, 400px); 
+        /* Гибкая высота: занимает всё доступное место, но не меньше 150px */
+        flex: 1 1 auto;
+        min-height: 150px; 
+        
         border: 2px solid #2a3142;
         background: #0c1020;
-        border-radius: 10px;
+        border-radius: 12px;
         overflow: hidden;
-        margin: 4px 0 8px;
-        flex-shrink: 1;
+        margin: 6px 0 10px;
     }
+    
     .side { 
-        flex: 1; padding: 6px; 
+        flex: 1; padding: 8px; 
         display: flex; flex-direction: column; align-items: center; 
-        overflow-y: auto; overflow-x: hidden;
+        /* Скролл только внутри сторон, если не влезают карты */
+        overflow-y: auto; 
+        overflow-x: hidden;
     }
     .side.enemy { background: linear-gradient(180deg, #2a1120, #140a14); border-left: 2px solid #2a3142; }
     .side.player { background: linear-gradient(180deg, #0a1424, #070b14); }
 
     .side-title { 
-        font-size: clamp(10px, 2.5vh, 14px); 
-        color: #cfe2ff; margin-bottom: 4px; font-weight: 900; text-align: center; 
+        font-size: clamp(12px, 3.5vw, 16px); 
+        color: #cfe2ff; margin-bottom: 6px; font-weight: 900; text-align: center; 
         flex-shrink: 0;
     }
 
     .cards { 
-        display: flex; flex-wrap: wrap; gap: 4px; 
+        display: flex; flex-wrap: wrap; gap: 6px; 
         justify-content: center; width: 100%; align-content: flex-start; 
     }
     
     .card {
-        width: clamp(45px, 11vw, 85px);
+        width: clamp(55px, 13vw, 90px);
         aspect-ratio: 0.77;
         height: auto;
-        background: #111a2f; border: 1.5px solid rgba(255,255,255,0.12); border-radius: 8px;
+        background: #111a2f; border: 2px solid rgba(255,255,255,0.12); border-radius: 10px;
         display: flex; flex-direction: column; align-items: center; justify-content: center;
         cursor: pointer; flex-shrink: 0; 
-        margin-bottom: 4px;
+        margin-bottom: 6px;
     }
-    .card.selected { border-color: #8BFFB0; background: #0f2a1a; }
-    .card.mystery { cursor: default; background: #0b0f1a; border: 1.5px dashed rgba(255,255,255,0.16); color: #55607a; font-size: 20px; font-weight: 900; }
+    .card.selected { border-color: #8BFFB0; background: #0f2a1a; box-shadow: 0 0 10px rgba(139,255,176,0.3); }
+    .card.mystery { cursor: default; background: #0b0f1a; border: 2px dashed rgba(255,255,255,0.16); color: #55607a; font-size: 24px; font-weight: 900; }
     
-    .card canvas { width: 80% !important; height: auto !important; margin-bottom: -5px; }
-    .smallText { font-size: clamp(8px, 1.5vh, 11px); font-weight: 900; color: #fff; -webkit-text-stroke: 0.4px #000; text-align: center; width: 100%;}
+    .card canvas { width: 85% !important; height: auto !important; margin-bottom: -4px; }
+    .smallText { font-size: clamp(9px, 2vw, 12px); font-weight: 900; color: #fff; -webkit-text-stroke: 0.5px #000; text-align: center; width: 100%;}
 
-    /* Result */
-    .resultTitle { font-size: clamp(24px, 8vh, 48px); -webkit-text-stroke: 1.5px #000; letter-spacing: 1px; margin-bottom: 10px; }
+    /* Result - Исправлено сплющивание */
+    .resultTitle { 
+        font-size: clamp(28px, 8vw, 52px); 
+        -webkit-text-stroke: 2px #000; letter-spacing: 1px; margin-bottom: 16px; 
+        text-align: center;
+    }
     .win { color: #8BFFB0; }
     .lose { color: #ff5c9a; }
-    .reward { font-size: clamp(16px, 5vh, 24px); color: #ffe58a; -webkit-text-stroke: 1px #000; margin-bottom: 12px; }
+    .reward { font-size: clamp(20px, 6vw, 28px); color: #ffe58a; -webkit-text-stroke: 1px #000; margin-bottom: 20px; text-align: center; }
 
-    @media (max-height: 450px) {
-        .popup-box { padding: 8px; max-height: 98vh; width: 80vw; flex-direction: row; flex-wrap: wrap; justify-content: center; }
-        .setup-arena { height: 60vh; width: 100%; order: 3; }
-        .battle-header { width: 100%; font-size: 18px; margin-bottom: 2px; order: 1;}
-        .btn-row { width: 100%; order: 4; margin-top: 4px; }
-        .card { width: clamp(40px, 9vw, 60px); }
-        button { padding: 6px; font-size: 12px; }
+    /* Дополнительные стили для очень маленьких экранов */
+    @media (max-height: 500px) {
+        .popup-box { padding: 8px; flex-direction: column; width: 85vw; }
+        .setup-arena { min-height: 120px; margin: 4px 0; }
+        .battle-header { font-size: 18px; margin-bottom: 4px; }
+        .btn-row { margin-top: 6px; }
+        button { padding: 8px; font-size: 12px; }
+        .title { font-size: 20px; margin-bottom: 6px; }
+        .resultTitle { margin-bottom: 8px; font-size: 24px; }
+        .reward { margin-bottom: 8px; font-size: 16px; }
     }
   </style>
 </head>
@@ -318,7 +345,7 @@
         }
         click(){ this._tone(520,'sine',0.12,0.12,260); }
         merge(){ this._tone(260,'sine',0.22,0.18,820); setTimeout(()=>this._tone(680,'sine',0.18,0.12,1200),35); }
-        // ЗВУК ПОКУПКИ УБРАН ПОЛНОСТЬЮ
+        // ЗВУК ПОКУПКИ УБРАН
         hit(){ this._tone(120,'triangle',0.10,0.14,55); }
         atk(){ this._tone(220,'triangle',0.18,0.10,70); }
         win(){ [523,659,784,1046].forEach((f,i)=>setTimeout(()=>this._tone(f,'sine',0.35,0.16),i*90)); }
@@ -760,7 +787,6 @@
     function squadPower(unitsArr){ return unitsArr.reduce((sum,u)=>sum + unitPower(u.level), 0); }
 
     function unitSizeForLevel(level){
-        // Уменьшил базовый размер юнитов, чтобы они не были гигантскими на телефоне
         const base = Math.min(window.innerWidth, window.innerHeight) * 0.15; 
         return clamp(base * (0.95 + level*0.020), 50, 140);
     }
@@ -879,7 +905,6 @@
             const selected = gameState.selectedUnitIds.includes(u.id); if(selected){ card.classList.add('selected'); power += unitPower(u.level); }
             if(!selected && gameState.selectedUnitIds.length >= CONFIG.SQUAD_LIMIT) card.style.opacity = '0.55';
             const cv = document.createElement('canvas'); 
-            // Уменьшил размер канваса превью для мобилок
             const thumbSize = window.innerHeight < 500 ? 50 : 76; 
             cv.width = thumbSize; cv.height = thumbSize; const g = cv.getContext('2d'); g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
             g.drawImage(getLabubuSpriteThumb(u.level, u.variant ?? 0), 0,0, thumbSize, thumbSize);
