@@ -15,9 +15,6 @@
         -webkit-tap-highlight-color: transparent;
         -webkit-touch-callout: none;
         -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
         user-select: none;
         touch-action: none;
     }
@@ -44,106 +41,140 @@
     .overlay {
         display: none;
         position: absolute; inset: 0;
-        background: rgba(0,0,0,0.86);
+        background: rgba(0,0,0,0.85);
         z-index: 100;
         align-items: center;
         justify-content: center;
         flex-direction: column;
         color: #fff;
-        padding: 14px;
+        padding: 10px;
         pointer-events: auto;
     }
 
     /* ROTATE OVERLAY (Only for Mobile Portrait) */
     #rotateOverlay { background: #000; z-index: 99999; }
     .phone-icon {
-        width: 60px; height: 100px; border: 4px solid #8BFFB0; border-radius: 10px;
-        margin-bottom: 30px; position: relative; animation: rotateIcon 2.5s infinite ease-in-out;
+        width: 50px; height: 80px; border: 3px solid #8BFFB0; border-radius: 8px;
+        margin-bottom: 20px; position: relative; animation: rotateIcon 2.5s infinite ease-in-out;
     }
-    .phone-icon::after { content: ''; position: absolute; top: 5px; left: 50%; transform: translateX(-50%); width: 40px; height: 2px; background: #8BFFB0; }
+    .phone-icon::after { content: ''; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); width: 30px; height: 2px; background: #8BFFB0; }
     @keyframes rotateIcon {
         0% { transform: rotate(0); opacity: 1; }
         40% { transform: rotate(90deg); opacity: 1; }
         80% { transform: rotate(90deg); opacity: 0; }
         100% { transform: rotate(0); opacity: 0; }
     }
-    #rotateMsg { font-size: 20px; text-transform: uppercase; text-align: center; padding: 0 20px; font-family: 'Arial Black', sans-serif; }
+    #rotateMsg { font-size: 16px; text-transform: uppercase; text-align: center; padding: 0 20px; }
 
     #loadingOverlay { z-index: 9999; background: #000; display: flex; }
 
-    /* Popups */
+    /* --- АДАПТИВНЫЕ ПОПАПЫ --- */
     .popup-box {
-        width: clamp(280px, 88vw, 520px);
+        width: clamp(300px, 90vw, 600px);
+        max-height: 95vh;
         background: #101426;
-        border: 3px solid #8BFFB0;
-        border-radius: 16px;
-        padding: 16px;
-        box-shadow: 0 0 34px rgba(139,255,176,0.18);
+        border: 2px solid #8BFFB0;
+        border-radius: 12px;
+        padding: 12px;
+        box-shadow: 0 0 20px rgba(139,255,176,0.15);
         display: flex;
         flex-direction: column;
         align-items: center;
+        overflow-y: auto;
     }
+    
     .title {
-        font-size: clamp(18px, 5vw, 30px);
+        font-size: clamp(16px, 4vh, 28px);
         color: #8BFFB0;
         text-transform: uppercase;
-        letter-spacing: 2px;
-        margin: 0 0 10px 0;
-        -webkit-text-stroke: 1px #000;
+        letter-spacing: 1px;
+        margin: 0 0 8px 0;
+        -webkit-text-stroke: 0.8px #000;
         text-align: center;
+        flex-shrink: 0;
     }
-    .sub { color: #cfe2ff; font-weight: 900; text-align: center; margin-bottom: 12px; }
+    .sub { color: #cfe2ff; font-weight: 900; text-align: center; margin-bottom: 8px; font-size: clamp(12px, 3vh, 18px); }
 
-    .btn-row { display: flex; gap: 10px; width: 100%; margin-top: 10px; }
-    button { font-family: inherit; font-weight: 900; cursor: pointer; border-radius: 12px; padding: 12px; border: 2px solid transparent; text-transform: uppercase; touch-action: manipulation; }
+    .btn-row { display: flex; gap: 8px; width: 100%; margin-top: 8px; flex-shrink: 0; }
+    button { 
+        font-family: inherit; font-weight: 900; cursor: pointer; 
+        border-radius: 8px; padding: clamp(8px, 2vh, 12px); 
+        border: 2px solid transparent; text-transform: uppercase; 
+        touch-action: manipulation; font-size: clamp(12px, 2.5vh, 16px);
+    }
     .btn-green { background: #35c56a; border-color: #1b6c38; color: #fff; flex: 1; }
     .btn-gray { background: #3b4257; border-color: #262b38; color: #e4ecff; flex: 1; }
     .btn-red { background: #ff5c9a; border-color: #7f2548; color: #fff; flex: 1; }
 
-    /* Setup & Battle UI */
+    /* Setup & Battle UI - Глубокая адаптация */
     .battle-header {
-        font-size: clamp(18px, 5vw, 36px);
+        font-size: clamp(16px, 4vh, 32px);
         color: #8BFFB0;
         text-transform: uppercase;
         text-shadow: 2px 2px 0 #000;
-        margin-bottom: 10px;
+        margin-bottom: 6px;
         text-align: center;
+        flex-shrink: 0;
     }
     .setup-arena {
         display: flex;
-        width: min(900px, 94vw);
-        height: min(520px, 60vh);
+        width: 100%;
+        height: clamp(150px, 50vh, 400px); 
         border: 2px solid #2a3142;
         background: #0c1020;
-        border-radius: 14px;
+        border-radius: 10px;
         overflow: hidden;
-        margin: 8px 0 12px;
+        margin: 4px 0 8px;
+        flex-shrink: 1;
     }
-    .side { flex: 1; padding: 10px; display: flex; flex-direction: column; align-items: center; overflow: auto; }
+    .side { 
+        flex: 1; padding: 6px; 
+        display: flex; flex-direction: column; align-items: center; 
+        overflow-y: auto; overflow-x: hidden;
+    }
     .side.enemy { background: linear-gradient(180deg, #2a1120, #140a14); border-left: 2px solid #2a3142; }
     .side.player { background: linear-gradient(180deg, #0a1424, #070b14); }
 
-    .side-title { font-size: 16px; color: #cfe2ff; margin-bottom: 8px; font-weight: 900; text-align: center; text-shadow: 1px 1px 0 #000; }
-
-    .cards { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; width: 100%; align-content: flex-start; }
-    .card {
-        width: 96px; height: 124px;
-        background: #111a2f; border: 2px solid rgba(255,255,255,0.12); border-radius: 14px;
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        cursor: pointer; flex-shrink: 0; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.35);
+    .side-title { 
+        font-size: clamp(10px, 2.5vh, 14px); 
+        color: #cfe2ff; margin-bottom: 4px; font-weight: 900; text-align: center; 
+        flex-shrink: 0;
     }
-    .card.selected { border-color: #8BFFB0; box-shadow: 0 0 12px rgba(139,255,176,0.35); background: #0f2a1a; }
-    .card.mystery { cursor: default; background: #0b0f1a; border: 2px dashed rgba(255,255,255,0.16); color: #55607a; font-size: 28px; font-weight: 900; }
-    .smallText { font-size: 12px; font-weight: 900; color: #fff; -webkit-text-stroke: 0.6px #000; }
+
+    .cards { 
+        display: flex; flex-wrap: wrap; gap: 4px; 
+        justify-content: center; width: 100%; align-content: flex-start; 
+    }
+    
+    .card {
+        width: clamp(45px, 11vw, 85px);
+        aspect-ratio: 0.77;
+        height: auto;
+        background: #111a2f; border: 1.5px solid rgba(255,255,255,0.12); border-radius: 8px;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        cursor: pointer; flex-shrink: 0; 
+        margin-bottom: 4px;
+    }
+    .card.selected { border-color: #8BFFB0; background: #0f2a1a; }
+    .card.mystery { cursor: default; background: #0b0f1a; border: 1.5px dashed rgba(255,255,255,0.16); color: #55607a; font-size: 20px; font-weight: 900; }
+    
+    .card canvas { width: 80% !important; height: auto !important; margin-bottom: -5px; }
+    .smallText { font-size: clamp(8px, 1.5vh, 11px); font-weight: 900; color: #fff; -webkit-text-stroke: 0.4px #000; text-align: center; width: 100%;}
 
     /* Result */
-    .resultTitle { font-size: clamp(22px, 7vw, 44px); -webkit-text-stroke: 2px #000; letter-spacing: 2px; margin-bottom: 10px; }
+    .resultTitle { font-size: clamp(24px, 8vh, 48px); -webkit-text-stroke: 1.5px #000; letter-spacing: 1px; margin-bottom: 10px; }
     .win { color: #8BFFB0; }
     .lose { color: #ff5c9a; }
-    .reward { font-size: 22px; color: #ffe58a; -webkit-text-stroke: 1px #000; margin-bottom: 12px; }
+    .reward { font-size: clamp(16px, 5vh, 24px); color: #ffe58a; -webkit-text-stroke: 1px #000; margin-bottom: 12px; }
 
-    @media (max-width: 420px){ .card{ width: 88px; height: 118px; } }
-    @media (max-height: 520px){ .setup-arena{ height: 65vh; margin-bottom: 8px; } .card{ width: 86px; height: 112px; } button{ padding: 10px; } }
+    @media (max-height: 450px) {
+        .popup-box { padding: 8px; max-height: 98vh; width: 80vw; flex-direction: row; flex-wrap: wrap; justify-content: center; }
+        .setup-arena { height: 60vh; width: 100%; order: 3; }
+        .battle-header { width: 100%; font-size: 18px; margin-bottom: 2px; order: 1;}
+        .btn-row { width: 100%; order: 4; margin-top: 4px; }
+        .card { width: clamp(40px, 9vw, 60px); }
+        button { padding: 6px; font-size: 12px; }
+    }
   </style>
 </head>
 
@@ -172,7 +203,7 @@
   </div>
 
   <div id="setupOverlay" class="overlay">
-    <div class="popup-box" style="width:min(940px, 96vw);">
+    <div class="popup-box">
       <div class="battle-header" id="setupTitle">PICK SQUAD</div>
       <div class="setup-arena">
         <div class="side player">
@@ -181,15 +212,15 @@
             <span id="squadCount" style="color:#8BFFB0">(0/5)</span>
           </div>
           <div class="cards" id="playerCards"></div>
-          <div class="side-title" style="margin-top:10px;">
+          <div class="side-title" style="margin-top:auto; padding-top:4px;">
             <span id="powerTxt">POWER</span>: <span id="playerPower">0</span>
           </div>
         </div>
         <div class="side enemy">
           <div class="side-title" id="enemyTxt">RIVAL</div>
-          <div class="side-title" id="enemyHiddenTxt" style="color:#ffb3d1; font-size:12px; margin-top:-2px;">HIDDEN</div>
+          <div class="side-title" id="enemyHiddenTxt" style="color:#ffb3d1; font-size:10px; margin-top:-2px;">HIDDEN</div>
           <div class="cards" id="enemyCards"></div>
-          <div class="side-title" style="margin-top:10px;">
+          <div class="side-title" style="margin-top:auto; padding-top:4px;">
             <span id="powerTxt2">POWER</span>: <span id="enemyPower">???</span>
           </div>
         </div>
@@ -287,7 +318,7 @@
         }
         click(){ this._tone(520,'sine',0.12,0.12,260); }
         merge(){ this._tone(260,'sine',0.22,0.18,820); setTimeout(()=>this._tone(680,'sine',0.18,0.12,1200),35); }
-        buy(){ this._tone(980,'sine',0.10,0.10); setTimeout(()=>this._tone(1400,'sine',0.18,0.10),40); }
+        // ЗВУК ПОКУПКИ УБРАН ПОЛНОСТЬЮ
         hit(){ this._tone(120,'triangle',0.10,0.14,55); }
         atk(){ this._tone(220,'triangle',0.18,0.10,70); }
         win(){ [523,659,784,1046].forEach((f,i)=>setTimeout(()=>this._tone(f,'sine',0.35,0.16),i*90)); }
@@ -690,7 +721,7 @@
         ctx.font = `900 ${size}px "Arial Black", Verdana, sans-serif`;
         ctx.textAlign = align; ctx.textBaseline = 'middle'; ctx.lineJoin = 'round';
         ctx.shadowColor = 'rgba(0,0,0,0.5)'; ctx.shadowBlur = 4;
-        ctx.strokeStyle = '#000'; ctx.lineWidth = Math.max(4, size/6);
+        ctx.strokeStyle = '#000'; ctx.lineWidth = Math.max(2.5, size/6);
         ctx.strokeText(text,x,y); 
         ctx.shadowBlur = 0;
         ctx.fillStyle = color; ctx.fillText(text,x,y);
@@ -705,8 +736,8 @@
             fontSize = fontSize * (maxW / m.width);
             ctx.font = `900 ${fontSize}px "Arial Black", Verdana, sans-serif`;
         }
-        const padX = Math.max(8, fontSize*0.6); 
-        const padY = Math.max(4, fontSize*0.4); 
+        const padX = Math.max(6, fontSize*0.6); 
+        const padY = Math.max(3, fontSize*0.4); 
         const bw = m.width > maxW ? maxW + padX*2 : m.width + padX*2; 
         const bh = fontSize + padY*2;
         ctx.translate(x,y); 
@@ -729,8 +760,9 @@
     function squadPower(unitsArr){ return unitsArr.reduce((sum,u)=>sum + unitPower(u.level), 0); }
 
     function unitSizeForLevel(level){
-        const base = Math.min(window.innerWidth, window.innerHeight) * 0.175;
-        return clamp(base * (0.95 + level*0.020), 62, 165);
+        // Уменьшил базовый размер юнитов, чтобы они не были гигантскими на телефоне
+        const base = Math.min(window.innerWidth, window.innerHeight) * 0.15; 
+        return clamp(base * (0.95 + level*0.020), 50, 140);
     }
 
     function unitRadius(u){ return unitSizeForLevel(u.level) * 0.48; }
@@ -772,7 +804,8 @@
         gameState.candy -= cost; const p = tryFindFreeSpot(level);
         gameState.units.push({ id: Date.now()+Math.random(), level, x:p.x, y:p.y, vx:(Math.random()*2-1)*30, vy:(Math.random()*2-1)*30, anim: 0.1, phase: Math.random()*Math.PI*2, rotPhase: Math.random()*Math.PI*2, variant: Math.floor(Math.random()*3), isDragging:false });
         gameState.maxLevel = Math.max(gameState.maxLevel, level);
-        sound.buy(); saveGame();
+        // ЗВУК ПОКУПКИ ОТКЛЮЧЕН
+        saveGame();
     }
 
     function mergeUnits(a,b){
@@ -845,7 +878,10 @@
             const card = document.createElement('div'); card.className = 'card';
             const selected = gameState.selectedUnitIds.includes(u.id); if(selected){ card.classList.add('selected'); power += unitPower(u.level); }
             if(!selected && gameState.selectedUnitIds.length >= CONFIG.SQUAD_LIMIT) card.style.opacity = '0.55';
-            const cv = document.createElement('canvas'); const thumbSize = 76; cv.width = thumbSize; cv.height = thumbSize; const g = cv.getContext('2d'); g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
+            const cv = document.createElement('canvas'); 
+            // Уменьшил размер канваса превью для мобилок
+            const thumbSize = window.innerHeight < 500 ? 50 : 76; 
+            cv.width = thumbSize; cv.height = thumbSize; const g = cv.getContext('2d'); g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
             g.drawImage(getLabubuSpriteThumb(u.level, u.variant ?? 0), 0,0, thumbSize, thumbSize);
             const txt = document.createElement('div'); txt.className = 'smallText'; txt.textContent = `${t.LVL} ${u.level}`;
             card.appendChild(cv); card.appendChild(txt);
@@ -915,17 +951,42 @@
 
     /* --- RENDER --- */
     function updateUIButtons(){
-        const w = window.innerWidth, h = window.innerHeight; const minDim = Math.min(w, h); const pad = 22;
-        const rBuy = clamp(minDim * 0.078, 54, 70); const rAd = clamp(minDim * 0.068, 46, 62); const rSet = clamp(minDim * 0.060, 42, 56);
+        const w = window.innerWidth, h = window.innerHeight; 
+        const minDim = Math.min(w, h); 
+        const pad = 12; // Уменьшил отступ от края
+
+        // ДИНАМИЧЕСКИЙ РАЗМЕР КНОПОК
+        // Используем множитель поменьше для мобильных
+        // На 360px высоте -> 360 * 0.12 = ~43px (радиус) -> ~86px диаметр. 
+        // clamp ограничивает максимальный размер до 55px (110px диаметр), чтобы не были гигантами
+        let scaleFactor = (h < 500) ? 0.13 : 0.08; 
+        
+        const rBuy = clamp(minDim * scaleFactor, 35, 55); 
+        const rAd = clamp(minDim * (scaleFactor - 0.01), 30, 48); 
+        const rSet = clamp(minDim * (scaleFactor - 0.015), 28, 44);
+
         const rightX = w - pad - Math.max(rBuy, rAd);
-        let adY = h * 0.36; let buyY = h * 0.58; const minGap = (rBuy + rAd + 60);
-        if (buyY - adY < minGap) { const center = (buyY + adY) / 2; adY = center - minGap / 2; buyY = center + minGap / 2; }
-        adY = clamp(adY, pad + rAd, h - pad - rAd); buyY = clamp(buyY, pad + rBuy, h - pad - rBuy);
-        const setX = pad + rSet; const setY = pad + rSet;
+        let adY = h * 0.35; 
+        let buyY = h * 0.65; 
+        const minGap = (rBuy + rAd + 20);
+
+        if (buyY - adY < minGap) { 
+            const center = h / 2; 
+            adY = center - minGap / 2; 
+            buyY = center + minGap / 2; 
+        }
+
+        // Защита от выхода за пределы
+        adY = clamp(adY, pad + rAd + 20, h - pad - rAd - 20); 
+        buyY = clamp(buyY, pad + rBuy + 20, h - pad - rBuy - 20);
+
+        const setX = pad + rSet; 
+        const setY = pad + rSet;
+        
         ui.buttons = [
             { id:'settings', x:setX, y:setY, r:rSet*0.82, color:'#4b556e', visible:true },
-            { id:'mute', x:setX, y:setY + rSet*2.05, r:rSet*0.72, color:'#293047', visible:gameState.settingsOpen },
-            { id:'lang', x:setX, y:setY + rSet*4.00, r:rSet*0.72, color:'#6aa7ff', visible:gameState.settingsOpen },
+            { id:'mute', x:setX, y:setY + rSet*2.1, r:rSet*0.72, color:'#293047', visible:gameState.settingsOpen },
+            { id:'lang', x:setX, y:setY + rSet*4.1, r:rSet*0.72, color:'#6aa7ff', visible:gameState.settingsOpen },
             { id:'ad', x:rightX, y:adY, r:rAd, color:'#ffe58a', visible:true },
             { id:'buy', x:rightX, y:buyY, r:rBuy, color:'#35c56a', visible:true }
         ];
@@ -945,9 +1006,12 @@
             ctx.save(); ctx.translate(u.x, u.y + bob); const s = 1 + (1-u.anim)*0.35; ctx.scale(s,s); ctx.rotate(wob);
             ctx.shadowColor = u.isDragging ? 'rgba(0,0,0,0.55)' : 'rgba(0,0,0,0.28)'; ctx.shadowBlur = u.isDragging ? 18 : 12; ctx.shadowOffsetY = u.isDragging ? 10 : 6;
             ctx.drawImage(sprite, -size/2, -size/2 - size*0.06, size, size);
-            ctx.shadowBlur = 0; ctx.restore(); drawStroked(`${t.LVL} ${u.level}`, u.x, u.y + size*0.62, Math.max(12, size*0.12), '#ffffff');
+            ctx.shadowBlur = 0; ctx.restore(); drawStroked(`${t.LVL} ${u.level}`, u.x, u.y + size*0.62, Math.max(10, size*0.14), '#ffffff');
         }
-        drawStroked(`${t.CANDY}: ${formatNumber(gameState.candy)}`, w/2, Math.max(28,h*0.06), Math.max(20,h*0.045), '#ffe58a');
+        
+        // Сладкий текст поменьше
+        drawStroked(`${t.CANDY}: ${formatNumber(gameState.candy)}`, w/2, Math.max(20,h*0.06), Math.max(16,h*0.05), '#ffe58a');
+        
         const offerLevel = getShopOffer(); const cost = getBuyCost(offerLevel); const offerSprite = getLabubuSpriteFull(offerLevel, 0);
         for(const b of ui.buttons){
             if(!b.visible) continue;
@@ -977,16 +1041,16 @@
             if(b.id === 'ad'){
                 ctx.fillStyle='#000'; ctx.beginPath(); const s=b.r*0.32; ctx.moveTo(b.x-s, b.y-s); ctx.lineTo(b.x-s, b.y+s); ctx.lineTo(b.x+s, b.y); ctx.closePath(); ctx.fill();
                 drawStroked(t.AD, b.x, b.y + b.r*0.62, b.r*0.30, AD_LABEL_COLOR);
-                const reward = Math.floor(getBuyCost(Math.max(1,gameState.maxLevel)) * 2.2); drawBadge(b.x, b.y - b.r*1.22, `+${formatNumber(reward)}`, Math.max(14,b.r*0.36), 'rgba(53,197,106,0.95)');
+                const reward = Math.floor(getBuyCost(Math.max(1,gameState.maxLevel)) * 2.2); drawBadge(b.x, b.y - b.r*1.22, `+${formatNumber(reward)}`, Math.max(10,b.r*0.36), 'rgba(53,197,106,0.95)');
             }
             if(b.id === 'buy'){
                 const can = gameState.candy >= cost;
-                drawBadge(b.x, b.y - b.r*1.30, `${t.PRICE}: ${formatNumber(cost)}`, Math.max(14, b.r*0.34), can ? 'rgba(15,18,32,0.92)' : 'rgba(59,66,87,0.92)');
+                drawBadge(b.x, b.y - b.r*1.30, `${t.PRICE}: ${formatNumber(cost)}`, Math.max(10, b.r*0.34), can ? 'rgba(15,18,32,0.92)' : 'rgba(59,66,87,0.92)');
                 const clipR = b.r * 0.72; ctx.save(); ctx.beginPath(); ctx.arc(b.x, b.y - b.r*0.05, clipR, 0, Math.PI*2); ctx.clip();
                 ctx.globalAlpha = 0.18; ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(b.x, b.y - b.r*0.05, clipR, 0, Math.PI*2); ctx.fill(); ctx.globalAlpha = 1;
                 const imgS = b.r * 1.55; ctx.drawImage(offerSprite, b.x - imgS/2, (b.y - b.r*0.05) - imgS/2 - imgS*0.06, imgS, imgS); ctx.restore();
-                ctx.save(); ctx.strokeStyle = 'rgba(0,0,0,0.65)'; ctx.lineWidth = Math.max(4, b.r*0.10); ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(b.x - b.r*0.18, b.y + b.r*0.55); ctx.lineTo(b.x + b.r*0.18, b.y + b.r*0.55); ctx.moveTo(b.x, b.y + b.r*0.37); ctx.lineTo(b.x, b.y + b.r*0.73); ctx.stroke(); ctx.restore();
-                drawBadge(b.x + b.r*0.62, b.y + b.r*0.62, `${offerLevel}`, Math.max(12,b.r*0.30), 'rgba(0,0,0,0.55)');
+                ctx.save(); ctx.strokeStyle = 'rgba(0,0,0,0.65)'; ctx.lineWidth = Math.max(3, b.r*0.10); ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(b.x - b.r*0.18, b.y + b.r*0.55); ctx.lineTo(b.x + b.r*0.18, b.y + b.r*0.55); ctx.moveTo(b.x, b.y + b.r*0.37); ctx.lineTo(b.x, b.y + b.r*0.73); ctx.stroke(); ctx.restore();
+                drawBadge(b.x + b.r*0.62, b.y + b.r*0.62, `${offerLevel}`, Math.max(10,b.r*0.30), 'rgba(0,0,0,0.55)');
                 if(!can){ ctx.save(); ctx.globalAlpha = 0.30; ctx.fillStyle = '#3b4257'; ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fill(); ctx.restore(); }
             }
         }
@@ -1023,7 +1087,7 @@
             ctx.fillStyle = core; ctx.beginPath(); ctx.arc(p.x, p.y, r*0.6, 0, Math.PI*2); ctx.fill();
             ctx.restore();
         }
-        drawStroked(t.BATTLE_LABEL, w/2, Math.max(24,h*0.05), Math.max(18,h*0.04), '#ffffff');
+        drawStroked(t.BATTLE_LABEL, w/2, Math.max(20,h*0.05), Math.max(14,h*0.04), '#ffffff');
     }
     
     /* --- INPUT --- */
@@ -1209,13 +1273,9 @@
         ctx.setTransform(1,0,0,1,0,0);
         ctx.scale(dpr,dpr);
 
-        // COMPLIANCE & RESPONSIVENESS LOGIC
-        // 1. Check if it's strictly a mobile device
         const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/i.test(navigator.userAgent));
         const isPortrait = h > w;
         
-        // 2. ONLY block if it is a Mobile Phone AND in Portrait Mode.
-        // Desktop browsers (even small windows) must NOT see the blocking overlay.
         const rotOverlay = document.getElementById('rotateOverlay');
         
         if(isMobileUA && isPortrait){
@@ -1295,13 +1355,11 @@
                 spawnFloating(window.innerWidth/2, window.innerHeight*0.28, TEXT[gameState.lang].TIP, '#ffffff', 18);
             }
             
-            // COMPLIANCE: Call Ready AFTER load logic
             yandex.notifyGameReady();
             yandex.gameplayStart();
             requestAnimationFrame(loop);
         } catch(err){
             console.error("Boot error:", err);
-            // Fallback boot just in case
             requestAnimationFrame(loop);
         } finally {
             if(loadingOverlay) loadingOverlay.style.display = 'none';
