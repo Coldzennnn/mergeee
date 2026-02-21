@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Block Merge: Warriors</title>
+    <title>Роблоксики: Слияние</title>
     <!-- Yandex Games SDK -->
     <script src="https://yandex.ru/games/sdk/v2"></script>
     <style>
@@ -170,13 +170,16 @@
             flex-direction: column;
             width: 95%;
             max-width: 800px;
-            height: 70vh;
+            height: 75vh;
             max-height: 600px;
             background: #121225;
             border-radius: 12px;
             overflow: hidden;
             margin-bottom: 15px;
             border: 2px solid #333;
+        }
+        .setup-arena * {
+            touch-action: pan-x pan-y; /* Enable scrolling inside setup arena */
         }
         .setup-section {
             padding: 10px;
@@ -188,11 +191,13 @@
             background: #1a1a2e;
             border-bottom: 2px solid #333;
             flex: 0 0 auto;
+            -webkit-overflow-scrolling: touch;
         }
         .setup-section.inventory {
             background: #0f1525;
             flex: 1;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         .section-label {
             color: #88c8ff;
@@ -309,6 +314,37 @@
         .result-title { font-family: 'Trebuchet MS', sans-serif; font-size: 42px; margin-bottom: 20px; letter-spacing: 4px; text-shadow: 0 0 30px currentColor; }
         .win { color: #2ecc71; }
         .lose { color: #e74c3c; }
+
+        /* Mobile Landscape Specific Fixes */
+        @media (max-height: 500px) {
+            .setup-arena {
+                flex-direction: row;
+                height: 85vh;
+                width: 98%;
+            }
+            .setup-section.my-team {
+                width: 45%;
+                border-bottom: none;
+                border-right: 2px solid #333;
+                overflow-y: auto;
+                justify-content: flex-start;
+            }
+            .setup-section.inventory {
+                width: 55%;
+            }
+            .slot-container {
+                flex-wrap: wrap;
+            }
+            .team-slot, .inv-card {
+                width: 50px; height: 70px;
+            }
+            .char-model { transform: scale(0.85); transform-origin: top center; }
+            .inv-card .char-model { transform: scale(0.75); transform-origin: center; }
+            .inv-card .lvl-tag { font-size: 9px; }
+            .inv-card .count-tag { font-size: 9px; padding: 1px 2px; }
+            .battle-header { font-size: 20px; margin-bottom: 5px; }
+            .action-btn { padding: 10px 30px; font-size: 18px; }
+        }
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;">
