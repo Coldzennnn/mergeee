@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -17,7 +17,6 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            touch-action: none;
             -webkit-user-drag: none;
             user-drag: none;
         }
@@ -30,15 +29,13 @@
             overflow: hidden;
             font-family: 'Trebuchet MS', 'Segoe UI', sans-serif;
             overscroll-behavior: none;
+            touch-action: none; /* Запрещаем pull-to-refresh на уровне body */
         }
         canvas {
             display: block;
             width: 100%;
             height: 100%;
-            touch-action: none;
-            -webkit-user-select: none !important;
-            user-select: none !important;
-            -webkit-touch-callout: none !important;
+            touch-action: none; /* На канвасе тачи обрабатываются игрой */
         }
         .overlay {
             display: none;
@@ -50,6 +47,7 @@
             justify-content: center;
             color: white;
             flex-direction: column;
+            touch-action: auto; /* Включаем нативные скроллы для оверлеев! */
         }
         #rotateOverlay {
             background: rgba(26, 26, 46, 0.98);
@@ -132,7 +130,7 @@
             letter-spacing: 1px;
         }
         .btn-group { display: flex; gap: 12px; width: 100%; }
-        button { font-family: inherit; }
+        button { font-family: inherit; touch-action: manipulation; }
         .btn-accept {
             flex: 1; padding: 12px;
             border: none; border-radius: 8px;
@@ -156,52 +154,52 @@
         .btn-decline:active { border-bottom-width: 1px; transform: translateY(2px); }
         .battle-header {
             font-family: 'Trebuchet MS', sans-serif;
-            font-size: clamp(20px, 5vw, 32px);
+            font-size: clamp(20px, 4vw, 28px);
             color: #00d4ff;
             text-transform: uppercase;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
             text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
             text-align: center;
             flex-shrink: 0;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
         }
+        
+        /* ОБНОВЛЕННЫЙ И НАДЕЖНЫЙ ЛЕЙАУТ ВЫБОРА КОМАНДЫ (ДЛЯ ТЕЛЕФОНОВ) */
         .setup-arena {
             display: flex;
-            flex-direction: column;
-            width: 95%;
+            flex-direction: row; /* Всегда в строку, так как игра горизонтальная */
+            width: 95vw;
             max-width: 800px;
             height: 75vh;
-            max-height: 600px;
+            max-height: 500px;
             background: #121225;
             border-radius: 12px;
             overflow: hidden;
             margin-bottom: 15px;
             border: 2px solid #333;
         }
-        .setup-arena * {
-            touch-action: pan-x pan-y; /* Enable scrolling inside setup arena */
-        }
         .setup-section {
             padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-y: auto; /* Включаем прокрутку */
+            -webkit-overflow-scrolling: touch; /* Плавный скролл на iOS */
+            touch-action: pan-y; /* Разрешаем браузеру обрабатывать вертикальные свайпы */
+            overscroll-behavior: contain;
         }
         .setup-section.my-team {
+            width: 40%;
             background: #1a1a2e;
-            border-bottom: 2px solid #333;
-            flex: 0 0 auto;
-            -webkit-overflow-scrolling: touch;
+            border-right: 2px solid #333;
         }
         .setup-section.inventory {
+            width: 60%;
             background: #0f1525;
-            flex: 1;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
         }
         .section-label {
             color: #88c8ff;
-            font-size: 14px;
+            font-size: clamp(10px, 3vw, 14px);
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 10px;
@@ -215,23 +213,12 @@
         }
         .slot-container {
             display: flex;
+            flex-wrap: wrap; /* Позволяем перенос карточек отряда */
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             width: 100%;
-            flex-wrap: nowrap;
+            padding-bottom: 15px;
         }
-        .team-slot {
-            width: 60px; height: 80px;
-            background: rgba(0,0,0,0.3);
-            border: 2px dashed #444;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: relative;
-        }
-        .team-slot.filled { border-style: solid; border-color: #2ecc71; background: rgba(46, 204, 113, 0.1); }
         .inventory-grid {
             display: flex;
             flex-wrap: wrap;
@@ -240,9 +227,30 @@
             width: 100%;
             padding-bottom: 20px;
         }
+        .team-slot, .inv-card {
+            width: clamp(50px, 12vw, 65px);
+            height: clamp(70px, 16vw, 90px);
+            background: rgba(0,0,0,0.3);
+            border: 2px dashed #444;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+        .team-slot.filled { border-style: solid; border-color: #2ecc71; background: rgba(46, 204, 113, 0.1); }
+        .inv-card { background: #202035; border-style: solid; }
+        .inv-card:active { transform: scale(0.95); }
+        .inv-card.disabled { opacity: 0.3; filter: grayscale(1); cursor: not-allowed; pointer-events: none; }
+        
         .char-model {
             position: relative;
             width: 40px; height: 50px;
+            transform: scale(0.8); /* Уменьшаем модельку, чтобы влезала в карточку на смартфонах */
+            transform-origin: top center;
+            margin-top: 5px;
         }
         .char-head {
             position: absolute; top: 0; left: 50%; transform: translateX(-50%);
@@ -272,33 +280,20 @@
             position: absolute; top: 40px; right: 9px;
             width: 9px; height: 10px; background: #222; border-radius: 2px;
         }
-        .inv-card {
-            width: 60px; height: 80px;
-            background: #202035;
-            border: 2px solid #444;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: relative;
-        }
-        .inv-card:active { transform: scale(0.95); }
-        .inv-card.disabled { opacity: 0.3; filter: grayscale(1); cursor: not-allowed; pointer-events: none; }
-        .inv-card .lvl-tag {
+        .inv-card .lvl-tag, .team-slot .lvl-tag {
             position: absolute; bottom: 2px; width: 100%; text-align: center;
-            font-size: 10px; color: #fff; font-weight: bold; text-shadow: 0 1px 2px #000;
+            font-size: clamp(9px, 2.5vw, 11px); color: #fff; font-weight: bold; text-shadow: 0 1px 2px #000;
         }
         .inv-card .count-tag {
             position: absolute; top: 2px; right: 2px;
             background: #2ecc71; color: #000; border-radius: 4px;
-            font-size: 10px; padding: 1px 3px; font-weight: bold;
+            font-size: clamp(9px, 2.5vw, 11px); padding: 1px 3px; font-weight: bold;
         }
         .inv-card.disabled .count-tag { background: #555; color: #aaa; }
+        
         .action-btn {
-            padding: 15px 40px;
-            font-size: 22px;
+            padding: clamp(10px, 3vw, 15px) clamp(20px, 5vw, 40px);
+            font-size: clamp(16px, 4vw, 22px);
             background: linear-gradient(180deg, #e74c3c, #c0392b);
             color: white;
             border: none;
@@ -311,40 +306,9 @@
         }
         .action-btn:active { border-bottom-width: 2px; transform: translateY(2px); }
         .action-btn:disabled { background: #444; border-color: #333; cursor: not-allowed; opacity: 0.5; transform: none; }
-        .result-title { font-family: 'Trebuchet MS', sans-serif; font-size: 42px; margin-bottom: 20px; letter-spacing: 4px; text-shadow: 0 0 30px currentColor; }
+        .result-title { font-family: 'Trebuchet MS', sans-serif; font-size: clamp(30px, 8vw, 42px); margin-bottom: 20px; letter-spacing: 4px; text-shadow: 0 0 30px currentColor; }
         .win { color: #2ecc71; }
         .lose { color: #e74c3c; }
-
-        /* Mobile Landscape Specific Fixes */
-        @media (max-height: 500px) {
-            .setup-arena {
-                flex-direction: row;
-                height: 85vh;
-                width: 98%;
-            }
-            .setup-section.my-team {
-                width: 45%;
-                border-bottom: none;
-                border-right: 2px solid #333;
-                overflow-y: auto;
-                justify-content: flex-start;
-            }
-            .setup-section.inventory {
-                width: 55%;
-            }
-            .slot-container {
-                flex-wrap: wrap;
-            }
-            .team-slot, .inv-card {
-                width: 50px; height: 70px;
-            }
-            .char-model { transform: scale(0.85); transform-origin: top center; }
-            .inv-card .char-model { transform: scale(0.75); transform-origin: center; }
-            .inv-card .lvl-tag { font-size: 9px; }
-            .inv-card .count-tag { font-size: 9px; padding: 1px 2px; }
-            .battle-header { font-size: 20px; margin-bottom: 5px; }
-            .action-btn { padding: 10px 30px; font-size: 18px; }
-        }
     </style>
 </head>
 <body oncontextmenu="return false;" ondragstart="return false;">
@@ -378,7 +342,7 @@
             <div class="setup-section my-team">
                 <div class="section-label"><span id="squadTitle">Active Squad</span></div>
                 <div class="slot-container" id="teamSlots"></div>
-                <div style="margin-top:8px; font-size: 14px; color: #2ecc71; font-weight: bold;"><span id="squadPowerLabel">Power</span>: <span id="squadPower">0</span></div>
+                <div style="margin-top:8px; font-size: 14px; color: #2ecc71; font-weight: bold; text-align: center;"><span id="squadPowerLabel">Power</span>:<br><span id="squadPower">0</span></div>
             </div>
             <div class="setup-section inventory">
                 <div class="section-label"><span id="barracksTitle" style="background:#0f1525">Barracks</span></div>
@@ -390,13 +354,13 @@
     
     <div id="battleResultOverlay" class="overlay">
         <div class="result-title" id="resultTitle">VICTORY</div>
-        <div id="resultReward" style="font-size: 28px; color: #f1c40f; margin-bottom: 40px; font-family: 'Trebuchet MS'; letter-spacing: 2px;"></div>
+        <div id="resultReward" style="font-size: clamp(20px, 5vw, 28px); color: #f1c40f; margin-bottom: 40px; font-family: 'Trebuchet MS'; letter-spacing: 2px;"></div>
         <button class="action-btn" id="continueBtn" style="background: linear-gradient(180deg, #2ecc71, #27ae60); border-color: #1e8449;">OK</button>
     </div>
     
     <div id="confirmResetOverlay" class="overlay" style="z-index: 200;">
         <div class="popup-box" style="border-color: #e74c3c;">
-            <div id="resetTitle" style="font-size: 24px; color: #e74c3c; margin-bottom: 15px; text-transform: uppercase; font-weight: bold;">RESET PROGRESS?</div>
+            <div id="resetTitle" style="font-size: 24px; color: #e74c3c; margin-bottom: 15px; text-transform: uppercase; font-weight: bold; text-align: center;">RESET PROGRESS?</div>
             <div id="resetDesc" style="color: #ccc; text-align: center; margin-bottom: 20px;">All data will be lost.</div>
             <div class="btn-group">
                 <button id="btnCancelReset" class="btn-decline" onclick="document.getElementById('confirmResetOverlay').style.display='none'">CANCEL</button>
@@ -411,16 +375,9 @@
     window.addEventListener('selectstart', e => { e.preventDefault(); return false; }, { passive: false });
     window.addEventListener('dragstart', e => { e.preventDefault(); return false; }, { passive: false });
     
-    let longPressTimer = null;
-    document.addEventListener('touchstart', e => {
-        // Prevent default only if not on specific interactive elements to allow buttons to work but stop zooming/scrolling
-        if (e.target.closest('button') || e.target.closest('.team-slot') || e.target.closest('.inv-card')) return;
-        longPressTimer = setTimeout(() => { e.preventDefault(); e.stopPropagation(); }, 500);
-        if (!e.target.closest('.overlay') && e.target.tagName !== 'CANVAS') e.preventDefault();
-    }, { passive: false });
-    
-    document.addEventListener('touchend', () => { if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; } }, { passive: false });
-    document.addEventListener('touchmove', () => { if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; } }, { passive: false });
+    // ВАЖНО: Мы убрали глобальный e.preventDefault() на touchstart для всего документа!
+    // Теперь браузер сам нормально обрабатывает свайпы (скроллинг) в меню.
+    // Вместо этого мы ставим preventDefault() ТОЛЬКО на сам canvas, чтобы поле игры не скроллилось при слиянии бойцов.
 
     // --- AUDIO ENGINE ---
     class AudioEngine {
@@ -605,7 +562,7 @@
         ru: {
             LOADING:"ЗАГРУЗКА...",COINS:"Баксы",LVL:"Ур.",AD_BTN:"Беспл.",
             AD_FULL:"Смотреть рекламу",SETTINGS:"НАСТРОЙКИ",SOUND:"Звук",LANG:"Язык",
-            ROTATE:"Переверните устройство",CHALLENGE:"АРЕНА!",ACCEPT:"В бой",
+            ROTATE:"Поверните устройство",CHALLENGE:"АРЕНА!",ACCEPT:"В бой",
             DECLINE:"Убежать",PREPARE:"ВЫБОР КОМАНДЫ",SQUAD:"Отряд",
             ENEMY:"Враги",HIDDEN:"СКРЫТЫЙ ВРАГ",POWER:"Сила",
             FIGHT_BTN:"В БОЙ!",WIN:"ПОБЕДА!",LOSE:"ПОРАЖЕНИЕ",
@@ -777,7 +734,7 @@
                     <div class="char-leg-l" style="background:${darken(col, 20)}"></div>
                     <div class="char-leg-r" style="background:${darken(col, 20)}"></div>
                 </div>
-                <div style="position:absolute; bottom:2px; font-size:10px; font-weight:bold; color:#fff; text-shadow:0 1px 2px #000;">${t.LVL} ${lvl}</div>`;
+                <div class="lvl-tag">${t.LVL} ${lvl}</div>`;
                 el.onclick = () => { GS.picked.splice(i, 1); audio.tap(); buildSetupUI(); };
             } else {
                 el.innerText = '+'; el.style.color = '#555'; el.style.fontSize = '24px';
@@ -798,7 +755,7 @@
             const skin = skinColor(lvl);
             el.innerHTML = `
             <div class="count-tag">x${remaining}</div>
-            <div class="char-model" style="transform:scale(0.9)">
+            <div class="char-model">
                 <div class="char-head" style="background:${skin}"><div class="char-face"></div></div>
                 <div class="char-body" style="background:${col}"></div>
                 <div class="char-arm-l" style="background:${col}"></div>
@@ -1247,6 +1204,8 @@
             drag = null;
         }
     }
+    
+    // Подключаем слушатели на холст. Они с `preventDefault`, чтобы канвас не скроллил страницу
     canvas.addEventListener('mousedown', onDown); window.addEventListener('mousemove', onMove); window.addEventListener('mouseup', onUp);
     canvas.addEventListener('touchstart', (e) => { if (e.cancelable) e.preventDefault(); e.stopPropagation(); onDown(e); }, { passive: false });
     canvas.addEventListener('touchmove', (e) => { if (e.cancelable) e.preventDefault(); e.stopPropagation(); onMove(e); }, { passive: false });
@@ -1311,7 +1270,6 @@
         loadSave();
         if (!GS.units.length) GS.units.push({ id: Date.now(), level: 1, slotIndex: 0, x: 0, y: 0, dragging: false, animScale: 1 });
         
-        // Resize before loop to ensure canvas dimensions are correct
         window.addEventListener('resize', resize);
         resize();
         refreshTexts();
@@ -1329,7 +1287,6 @@
 
     // Start trigger
     window.onload = startGame;
-    // Fallback if onload missed
     if (document.readyState === 'complete' || document.readyState === 'interactive') setTimeout(startGame, 100);
 </script>
 </body>
